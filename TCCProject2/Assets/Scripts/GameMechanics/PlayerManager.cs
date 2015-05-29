@@ -13,18 +13,21 @@ public class PlayerManager : MonoBehaviour {
 	private bool dead;
 	private bool isWithFlag;
 
-	private SpriteRenderer healthBar;			// Reference to the sprite renderer of the health bar.
+	public SpriteRenderer healthBar;			// Reference to the sprite renderer of the health bar.
 
 	// Use this for initialization
 	void Start () 
 	{
-		healthBar = GameObject.Find("HealthBar").GetComponent<SpriteRenderer>();
+//		healthBar = GameObject.Fi.GetComponent<SpriteRenderer>();
 		healthScale = healthBar.transform.localScale;
 	}
 
 	void OnCollisionEnter2D(Collision2D col)
 	{
 		if (col.gameObject.tag == "Projectile") 
+		{
+			TakeDamage(10, col.gameObject.transform);
+		} else if (col.gameObject.tag == "BulletProjectile") 
 		{
 			TakeDamage(10, col.gameObject.transform);
 		}
@@ -38,7 +41,7 @@ public class PlayerManager : MonoBehaviour {
 		healthBar.transform.localScale = new Vector3(healthScale.x * health * 0.01f, 1, 1);
 	}
 
-	void TakeDamage (int damage, Transform posTiro)
+	public void TakeDamage (int damage, Transform posTiro)
 	{
 		// Make sure the player can't jump.
 		// Create a vector that's from the enemy to the player with an upwards boost.

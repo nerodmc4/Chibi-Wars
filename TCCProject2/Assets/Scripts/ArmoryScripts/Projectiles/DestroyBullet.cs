@@ -5,17 +5,19 @@ public class DestroyBullet : MonoBehaviour {
 
 	public float BulletDestroyTime = 1.5f;
 	public GameObject Explosion;
+	public int dano = 10;
 	Vector2 ExplosionPoint;
 
 	// Use this for initialization
 	void Start () {
-
+		//.tag = "BulletProjectile";
 	}
 
 	void OnCollisionEnter2D(Collision2D col)
 	{
-		if (col.gameObject.tag == "Player") {
-			//Destroy (this.gameObject);
+		if (col.gameObject.tag == "Inimigo") {
+			col.gameObject.GetComponent<PlayerManager>().TakeDamage(dano, col.gameObject.transform);
+			Destroy (this.gameObject);
 		}
 		else 
 		{

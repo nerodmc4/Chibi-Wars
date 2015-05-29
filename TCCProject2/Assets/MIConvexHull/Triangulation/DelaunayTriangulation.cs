@@ -1,19 +1,4 @@
-﻿/******************************************************************************
- *
- *    MIConvexHull, Copyright (C) 2013 David Sehnal, Matthew Campbell
- *
- *  This library is free software; you can redistribute it and/or modify it 
- *  under the terms of  the GNU Lesser General Public License as published by 
- *  the Free Software Foundation; either version 2.1 of the License, or 
- *  (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful, 
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of 
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser 
- *  General Public License for more details.
- *  
- *****************************************************************************/
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MIConvexHull
 {
@@ -21,26 +6,12 @@ namespace MIConvexHull
     using System.Linq;
     using System;
 
-    /// <summary>
-    /// Calculation and representation of Delaunay triangulation.
-    /// </summary>
-    /// <typeparam name="TVertex"></typeparam>
-    /// <typeparam name="TCell"></typeparam>
     public class DelaunayTriangulation<TVertex, TCell> : ITriangulation<TVertex, TCell>
         where TCell : TriangulationCell<TVertex, TCell>, new()
         where TVertex : IVertex
     {
-        /// <summary>
-        /// Cells of the triangulation.
-        /// </summary>
         public IEnumerable<TCell> Cells { get; private set; }
 
-        /// <summary>
-        /// Creates the Delaunay triangulation of the input data.
-        /// Be careful with concurrency, because during the computation, the vertex position arrays get resized.
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
         public static DelaunayTriangulation<TVertex, TCell> Create(IEnumerable<TVertex> data)
         {
             if (data == null) throw new ArgumentException("data can't be null.");
@@ -49,7 +20,6 @@ namespace MIConvexHull
 
             int dimension = data.First().Position.Length;
 
-            // Resize the arrays and lift the data.
             foreach (var p in data)
             {
                 double lenSq = MathHelper.LengthSquared(p.Position);
@@ -59,17 +29,14 @@ namespace MIConvexHull
                 p.Position[dimension] = lenSq;
             }
 
-            // Find the convex hull
             var delaunayFaces = ConvexHullInternal.GetConvexFacesInternal<TVertex, TCell>(data);
 
-            // Resize the data back
             foreach (var p in data)
             {
                 var v = p.Position;
                 Array.Resize(ref v, dimension);
                 p.Position = v;
             }
-            // Remove the "upper" faces
             for (var i = delaunayFaces.Count - 1; i >= 0; i--)
             {
                 var candidate = delaunayFaces[i];
@@ -95,7 +62,6 @@ namespace MIConvexHull
                 }
             }
 
-            // Create the "TCell" representation.
             int cellCount = delaunayFaces.Count;
             var cells = new TCell[cellCount];
 
@@ -125,11 +91,7 @@ namespace MIConvexHull
 
             return new DelaunayTriangulation<TVertex, TCell> { Cells = cells };
         }
-
-        /// <summary>
-        /// Can only be created using a factory method.
-        /// </summary>
-        private DelaunayTriangulation()
+		private DelaunayTriangulation()
         {
 
         }

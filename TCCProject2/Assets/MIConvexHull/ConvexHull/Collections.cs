@@ -1,54 +1,21 @@
-﻿/******************************************************************************
- *
- *    MIConvexHull, Copyright (C) 2013 David Sehnal, Matthew Campbell
- *
- *  This library is free software; you can redistribute it and/or modify it 
- *  under the terms of  the GNU Lesser General Public License as published by 
- *  the Free Software Foundation; either version 2.1 of the License, or 
- *  (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful, 
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of 
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser 
- *  General Public License for more details.
- *  
- *****************************************************************************/
-
-namespace MIConvexHull
+﻿namespace MIConvexHull
 {
     using System;
     using System.Collections.Generic;
 
-    /// <summary>
-    /// Used to effectively store vertices beyond.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
     sealed class VertexBuffer
     {
         VertexWrap[] items;
         int count;
         int capacity;
 
-        /// <summary>
-        /// Number of elements present in the buffer.
-        /// </summary>
         public int Count { get { return count; } }
 
-        /// <summary>
-        /// Get the i-th element.
-        /// </summary>
-        /// <param name="i"></param>
-        /// <returns></returns>
-        public VertexWrap this[int i]
-        {
+        public VertexWrap this[int i]{
             get { return items[i]; }
         }
 
-        /// <summary>
-        /// Size matters.
-        /// </summary>
-        void EnsureCapacity()
-        {
+       void EnsureCapacity(){
             if (count + 1 > capacity)
             {
                 if (capacity == 0) capacity = 4;
@@ -57,41 +24,22 @@ namespace MIConvexHull
             }
         }
 
-        /// <summary>
-        /// Adds a vertex to the buffer.
-        /// </summary>
-        /// <param name="item"></param>
-        public void Add(VertexWrap item)
-        {
+        public void Add(VertexWrap item){
             EnsureCapacity();
             items[count++] = item;
         }
 
-        /// <summary>
-        /// Sets the Count to 0, otherwise does nothing.
-        /// </summary>
-        public void Clear()
-        {
+		public void Clear(){
             count = 0;
         }
     }
         
-    /// <summary>
-    /// A priority based linked list.
-    /// </summary>
     sealed class FaceList
     {
         ConvexFaceInternal first, last;
 
-        /// <summary>
-        /// Get the first element.
-        /// </summary>
         public ConvexFaceInternal First { get { return first; } }
 
-        /// <summary>
-        /// Adds the element to the beginning.
-        /// </summary>
-        /// <param name="face"></param>
         void AddFirst(ConvexFaceInternal face)
         {
             face.InList = true;
@@ -100,17 +48,10 @@ namespace MIConvexHull
             this.first = face;
         }
 
-        /// <summary>
-        /// Adds a face to the list.
-        /// </summary>
-        /// <param name="face"></param>
-        public void Add(ConvexFaceInternal face)
+       public void Add(ConvexFaceInternal face)
         {
-            if (face.InList)
-            {
-                //if (this.first.FurthestDistance < face.FurthestDistance)
-                if (this.first.VerticesBeyond.Count < face.VerticesBeyond.Count)
-                {
+            if (face.InList){
+                if (this.first.VerticesBeyond.Count < face.VerticesBeyond.Count){
                     Remove(face);
                     AddFirst(face);
                 }
@@ -119,7 +60,6 @@ namespace MIConvexHull
 
             face.InList = true;
 
-            //if (first != null && first.FurthestDistance < face.FurthestDistance)
             if (first != null && first.VerticesBeyond.Count < face.VerticesBeyond.Count)
             {
                 this.first.Previous = face;
@@ -141,10 +81,6 @@ namespace MIConvexHull
             }
         }
 
-        /// <summary>
-        /// Removes the element from the list.
-        /// </summary>
-        /// <param name="face"></param>
         public void Remove(ConvexFaceInternal face)
         {
             if (!face.InList) return;
@@ -155,7 +91,7 @@ namespace MIConvexHull
             {
                 face.Previous.Next = face.Next;
             }
-            else if (/*first == face*/ face.Previous == null)
+            else if (face.Previous == null)
             {
                 this.first = face.Next;
             }
@@ -164,7 +100,7 @@ namespace MIConvexHull
             {
                 face.Next.Previous = face.Previous;
             }
-            else if (/*last == face*/ face.Next == null)
+            else if (face.Next == null)
             {
                 this.last = face.Previous;
             }
@@ -174,22 +110,12 @@ namespace MIConvexHull
         }
     }
 
-    /// <summary>
-    /// Connector list.
-    /// </summary>
     sealed class ConnectorList
     {
         FaceConnector first, last;
 
-        /// <summary>
-        /// Get the first element.
-        /// </summary>
         public FaceConnector First { get { return first; } }
 
-        /// <summary>
-        /// Adds the element to the beginning.
-        /// </summary>
-        /// <param name="connector"></param>
         void AddFirst(FaceConnector connector)
         {
             this.first.Previous = connector;
@@ -197,10 +123,6 @@ namespace MIConvexHull
             this.first = connector;
         }
 
-        /// <summary>
-        /// Adds a face to the list.
-        /// </summary>
-        /// <param name="element"></param>
         public void Add(FaceConnector element)
         {
             if (this.last != null)
@@ -215,17 +137,13 @@ namespace MIConvexHull
             }
         }
 
-        /// <summary>
-        /// Removes the element from the list.
-        /// </summary>
-        /// <param name="connector"></param>
         public void Remove(FaceConnector connector)
         {
             if (connector.Previous != null)
             {
                 connector.Previous.Next = connector.Next;
             }
-            else if (/*first == face*/ connector.Previous == null)
+            else if (connector.Previous == null)
             {
                 this.first = connector.Next;
             }
@@ -234,7 +152,7 @@ namespace MIConvexHull
             {
                 connector.Next.Previous = connector.Previous;
             }
-            else if (/*last == face*/ connector.Next == null)
+            else if (connector.Next == null)
             {
                 this.last = connector.Previous;
             }

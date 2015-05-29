@@ -8,7 +8,7 @@ public class Voronoi : MonoBehaviour
 {
 	
 	public int NumberOfVertices = 1000;
-	public float size = 5.0f;
+	public float size = 150.0f;
 	
 	Material lineMaterial;
 	Mesh mesh;
@@ -54,11 +54,17 @@ public class Voronoi : MonoBehaviour
 		
 		mesh.vertices = meshVerts;
 		mesh.SetIndices(indices, MeshTopology.Points, 0);
-		
+		Transform parent = new GameObject("asafdsa").transform;
+		foreach(Vertex2 v in vertices){
+			GameObject g = new GameObject(v.ToString());
+			g.transform.parent = parent;
+			g.transform.position = new Vector3((float)v.x, (float)v.y, -2f);
+			g.AddComponent<CircleCollider2D>().isTrigger = true;
+			g.tag = "voronoi";
+		}
 		float now = Time.realtimeSinceStartup;
 		voronoiMesh = VoronoiMesh.Create<Vertex2, Cell2>(vertices);
 		float interval = Time.realtimeSinceStartup - now;
-		
 		Debug.Log("time = " + interval * 1000.0f);
 		
 	}

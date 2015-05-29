@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour {
 	public float radiuss;
 	public LayerMask ground;
 	public GameObject rope;
+	public Vector3 posicao;
 
 	public Animator anim;
 
@@ -38,7 +39,9 @@ public class PlayerController : MonoBehaviour {
 		if (col.gameObject.tag == "ground") 
 		{
 			isOnGround = true;
-		} 
+		} else if(col.gameObject.tag == "voronoi"){
+			posicao = col.gameObject.transform.position;
+		}
 	}
 
 	// Update is called once per frame

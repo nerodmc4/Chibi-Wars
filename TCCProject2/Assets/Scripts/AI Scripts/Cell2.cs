@@ -3,9 +3,6 @@ using System.Collections;
 using System.Linq;
 using MIConvexHull;
 
-/// <summary>
-/// A vertex is a simple class that stores the postion of a point, node or vertex.
-/// </summary>
 public class Cell2 : TriangulationCell<Vertex2, Cell2>
 {
 	Vector2? circumCenter, centroid;
@@ -52,13 +49,10 @@ public class Cell2 : TriangulationCell<Vertex2, Cell2>
 	
 	Vector2 GetCircumcenter ()
 	{
-		// From MathWorld: http://mathworld.wolfram.com/Circumcircle.html
-	
 		var points = Vertices;
 	
 		double[,] m = new double[3, 3];
 	
-		// x, y, 1
 		for (int i = 0; i < 3; i++) {
 			m[i, 0] = points[i].x;
 			m[i, 1] = points[i].y;
@@ -66,27 +60,16 @@ public class Cell2 : TriangulationCell<Vertex2, Cell2>
 		}
 		var a = Determinant(m);
 	
-		// size, y, 1
 		for (int i = 0; i < 3; i++) {
 			m[i, 0] = LengthSquared (points[i].Position);
 		}
 		var dx = -Determinant(m);
 	
-		// size, x, 1
 		for (int i = 0; i < 3; i++) {
 			m[i, 1] = points[i].x;
 		}
 		var dy = Determinant(m);
-	
-		// size, x, y
-		//for (int i = 0; i < 3; i++) {
-		//	m[i, 2] = points[i].y;
-		//}
-		//var c = -Det(m);
-	
 		var s = -1.0 / (2.0 * a);
-		//var r = System.Math.Abs(s) * System.Math.Sqrt(dx * dx + dy * dy - 4 * a * c);
-
 		return new Vector2((float)(s * dx), (float)(s * dy));
 	}
 	
