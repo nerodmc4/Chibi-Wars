@@ -23,7 +23,7 @@ public class Gun02 : MonoBehaviour {
 	
 	void Start ()
 	{
-		currentGun = 0;
+		currentGun = 2;
 	}
 	
 	

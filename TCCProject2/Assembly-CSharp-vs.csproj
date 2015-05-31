@@ -238,6 +238,7 @@
      <Compile Include="Assets\Poly2Tri\Utility\Rect2D.cs" />
      <Compile Include="Assets\Scripts\AI Scripts\Cell2.cs" />
      <Compile Include="Assets\Scripts\AI Scripts\Drone01.cs" />
+     <Compile Include="Assets\Scripts\AI Scripts\Raycast.cs" />
      <Compile Include="Assets\Scripts\AI Scripts\Vertex2.cs" />
      <Compile Include="Assets\Scripts\AI Scripts\Voronoi.cs" />
      <Compile Include="Assets\Scripts\ArmoryScripts\CannonScript.cs" />
@@ -257,6 +258,7 @@
      <Compile Include="Assets\Scripts\DestructibleScripts\BaseDestructibleScript.cs" />
      <Compile Include="Assets\Scripts\DestructibleScripts\ShrinkAndDestroy.cs" />
      <Compile Include="Assets\Scripts\DestructibleScripts\TerrainDestructorScript.cs" />
+     <Compile Include="Assets\Scripts\Drone\EnemyAI.cs" />
      <Compile Include="Assets\Scripts\Drone\Gun01.cs" />
      <Compile Include="Assets\Scripts\Drone\Gun02.cs" />
      <Compile Include="Assets\Scripts\Drone\Gun03.cs" />

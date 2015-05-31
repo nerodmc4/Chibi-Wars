@@ -29,9 +29,11 @@ public class PlayerController : MonoBehaviour {
 		Gizmos.DrawWireSphere (Grounder.transform.position, radiuss);
 	}
 
-	void OndTriggerEnter2D(Collider2D other)
+	void OnTriggerEnter2D(Collider2D other)
 	{
-
+		if(other.gameObject.tag == "voronoi"){
+			posicao = other.gameObject.transform.position;
+		}
 	}
 
 	void OnCollisionEnter2D(Collision2D col)
@@ -39,9 +41,8 @@ public class PlayerController : MonoBehaviour {
 		if (col.gameObject.tag == "ground") 
 		{
 			isOnGround = true;
-		} else if(col.gameObject.tag == "voronoi"){
-			posicao = col.gameObject.transform.position;
-		}
+		} 
+
 	}
 
 	// Update is called once per frame

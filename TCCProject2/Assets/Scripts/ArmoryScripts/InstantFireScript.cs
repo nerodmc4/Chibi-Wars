@@ -22,7 +22,7 @@ public class InstantFireScript : MonoBehaviour {
 
 	void Start ()
 	{
-		currentGun = 0;
+		currentGun = 2;
 	}
 	
 	
@@ -55,12 +55,12 @@ public class InstantFireScript : MonoBehaviour {
 		mousePos.Normalize();
 		if (currentGun == 1 || currentGun == 2) {
 			projectile.rigidbody2D.velocity = new Vector2 (shootVelocity * mousePos.x, shootVelocity * mousePos.y + Random.Range (-10.5f, 10.5f));
-		} else if (currentGun == 0 || currentGun == 3 || currentGun == 4) {
+		}/* else if (currentGun == 0 || currentGun == 3 || currentGun == 4) {
 			projectile.rigidbody2D.velocity = new Vector2 (shootVelocity * mousePos.x, shootVelocity * mousePos.y + Random.Range (-3.5f, 3.5f));
 		} else 
 		{
 			projectile.rigidbody2D.velocity = new Vector2 (shootVelocity * mousePos.x, shootVelocity * mousePos.y);
-		}
+		} */ 
 		canShoot = false;
 	
 	}
@@ -76,15 +76,14 @@ public class InstantFireScript : MonoBehaviour {
 		mousePos.Normalize();
 
 		float angle = Mathf.Atan2 (mousePos.y, mousePos.x) * Mathf.Rad2Deg;
+		//float angle = Mathf.Atan2 (playerVoronoi.posicao.y, playerVoronoi.posicao.x) * Mathf.Rad2Deg;
 		
 		if(angle < 90.0f && angle > -90.0f) 
 		{
-			//Debug.Log("direita");
 			player.gameObject.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
 		} 
 		else
 		{ 
-			//Debug.Log("esquerda");
 			player.gameObject.transform.localScale = new Vector3(-0.6f, 0.6f, 0.6f);
 		}
 		
