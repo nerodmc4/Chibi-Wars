@@ -54,13 +54,17 @@ public class Voronoi : MonoBehaviour
 		
 		mesh.vertices = meshVerts;
 		mesh.SetIndices(indices, MeshTopology.Points, 0);
-		Transform parent = new GameObject("asafdsa").transform;
+		Transform parent = new GameObject("Bolotial").transform;
 		foreach(Vertex2 v in vertices){
+			if(Physics2D.OverlapCircle(new Vector2((float) v.x, (float) v.y), 0.25f,1<<10)){
+				continue;
+			}
 			GameObject g = new GameObject(v.ToString());
 			g.transform.parent = parent;
 			g.transform.position = new Vector3((float)v.x, (float)v.y, -2f);
 			g.AddComponent<CircleCollider2D>().isTrigger = true;
 			g.tag = "voronoi";
+			g.layer = 11;
 		}
 		float now = Time.realtimeSinceStartup;
 		voronoiMesh = VoronoiMesh.Create<Vertex2, Cell2>(vertices);

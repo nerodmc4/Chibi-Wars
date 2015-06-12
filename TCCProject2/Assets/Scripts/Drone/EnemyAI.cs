@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class EnemyAI : MonoBehaviour {
 	//public Transform target;
@@ -16,16 +17,24 @@ public class EnemyAI : MonoBehaviour {
 	LineRenderer linha;
 	public Vector2 voronoi2Dpos;
 	public Vector2 lua2Dpos;
+	public float OneDirection;
+	public float MenorDirection;
+	public float Speed;
+	public Vector3 PosDirection;
+	public List <Collider2D> visitados = new List<Collider2D>();
+
+	public Vector2 vectorDir;
 	int municao;
 	float reloadTime;
 	public GameObject tiro;
 	public Transform shooterPos;
+	public float raio;
 	Vector2 direcao;
-	enum EnemyPathStates{SEARCHING, PLAYERONSIGHT};
-	enum EnemyActionStates{ATTACKING, RELOADING, DEFENDING};
+	public enum EnemyPathStates{SEARCHING, PLAYERONSIGHT, MOVING};
+	public enum EnemyActionStates{ATTACKING, RELOADING, DEFENDING};
 
-	EnemyPathStates enemyPath;
-	EnemyActionStates enemyAction;
+	public EnemyPathStates enemyPath;
+	public EnemyActionStates enemyAction;
 
 	void Awake(){
 		myTransform = transform;
@@ -35,7 +44,8 @@ public class EnemyAI : MonoBehaviour {
 	void Start () {
 		//GameObject go = GameObject.FindGameObjectWithTag("Player");
 		//target = go.transform;
-		municao = 500;
+		enemyPath = EnemyPathStates.SEARCHING;
+		municao = 15;
 		rb2D = GetComponent<Rigidbody2D>();
 		linha = this.GetComponent<LineRenderer>();
 	}
@@ -62,13 +72,45 @@ public class EnemyAI : MonoBehaviour {
 			Shoot();
 		}
 
+		float Step = Speed * Time.deltaTime;
+		switch(enemyPath){
+			case EnemyPathStates.SEARCHING:
+				Collider2D[] pointsVertex = Physics2D.OverlapCircleAll((Vector2) transform.position, raio, 1<<11);
+				MenorDirection = Mathf.Infinity;
+				foreach (Collider2D circulinho in pointsVertex){
+					if(visitados.Contains(circulinho)){
+						continue;
+					}
+					vectorDir = circulinho.transform.position - playerVoronoi.posicao;
+					OneDirection = vectorDir.magnitude;
+					if (OneDirection < MenorDirection){
+						MenorDirection = OneDirection;
+						PosDirection = circulinho.transform.position;
+						enemyPath = EnemyPathStates.MOVING;
+					}
+				}
+				
+			break;
+
+			case EnemyPathStates.MOVING:
+				transform.position = Vector3.MoveTowards(transform.position, PosDirection, Step);
+				if(transform.position == PosDirection){
+					enemyPath = EnemyPathStates.SEARCHING;
+					visitados.Add(Physics2D.OverlapPoint(transform.position, 1<<11));
+				}
+				
+
+			break;
+
+		}
+
 		Debug.DrawLine(playerVoronoi.posicao, myTransform.position, Color.cyan);
 		
 		//look at target
-		myTransform.rotation = Quaternion.Slerp(myTransform.rotation, Quaternion.LookRotation(playerVoronoi.posicao + myTransform.position), rotationSpeed * Time.deltaTime);
+		myTransform.rotation = Quaternion.Slerp(myTransform.rotation, Quaternion.LookRotation(playerVoronoi.posicao - myTransform.position), rotationSpeed * Time.deltaTime);
 		
 		//move towards target
-		myTransform.position -= myTransform.forward * moveSpeed * Time.deltaTime;
+		//myTransform.position -= myTransform.forward * moveSpeed * Time.deltaTime;
 
 		voronoi2Dpos = new Vector2 (playerVoronoi.posicao.x, playerVoronoi.posicao.y);
 		lua2Dpos = new Vector2 (myTransform.position.x, myTransform.position.y);
@@ -87,7 +129,10 @@ public class EnemyAI : MonoBehaviour {
 		else 
 		{
 			linha.SetPosition(1, myTransform.position);
-			enemyPath = EnemyPathStates.SEARCHING;
+			if(enemyPath != EnemyPathStates.MOVING && enemyPath != EnemyPathStates.SEARCHING){
+				enemyPath = EnemyPathStates.SEARCHING;
+				visitados.Clear();
+			}
 		}
 		linha.SetPosition(0, myTransform.position);
 	}

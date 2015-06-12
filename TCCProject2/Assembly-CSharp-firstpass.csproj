@@ -168,16 +168,16 @@
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="Photon3Unity3D">
- <HintPath>/Users/gabrielmoraes/Documents/TCC03/TCCProject2/Assets/Plugins/Photon3Unity3D.dll</HintPath>
+ <HintPath>/Users/gabrielmoraes/Documents/Chibi-Wars/TCCProject2/Assets/Plugins/Photon3Unity3D.dll</HintPath>
  </Reference>
  <Reference Include="JsonOrg">
- <HintPath>/Users/gabrielmoraes/Documents/TCC03/TCCProject2/Assets/UNITYProjetc/Plugins/JsonOrg.dll</HintPath>
+ <HintPath>/Users/gabrielmoraes/Documents/Chibi-Wars/TCCProject2/Assets/UNITYProjetc/Plugins/JsonOrg.dll</HintPath>
  </Reference>
  <Reference Include="KiiCloudStorageSDK">
- <HintPath>/Users/gabrielmoraes/Documents/TCC03/TCCProject2/Assets/UNITYProjetc/Plugins/KiiCloudStorageSDK.dll</HintPath>
+ <HintPath>/Users/gabrielmoraes/Documents/Chibi-Wars/TCCProject2/Assets/UNITYProjetc/Plugins/KiiCloudStorageSDK.dll</HintPath>
  </Reference>
  <Reference Include="KiiCloudUnitySDK">
- <HintPath>/Users/gabrielmoraes/Documents/TCC03/TCCProject2/Assets/UNITYProjetc/Plugins/KiiCloudUnitySDK.dll</HintPath>
+ <HintPath>/Users/gabrielmoraes/Documents/Chibi-Wars/TCCProject2/Assets/UNITYProjetc/Plugins/KiiCloudUnitySDK.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
